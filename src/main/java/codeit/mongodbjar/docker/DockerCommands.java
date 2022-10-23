@@ -1,11 +1,13 @@
 package codeit.mongodbjar.docker;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.PullImageResultCallback;
+import com.github.dockerjava.api.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-
 import java.util.Collections;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static java.lang.String.format;
 
@@ -13,14 +15,13 @@ import static java.lang.String.format;
 public class DockerCommands {
 
     public static Consumer<DockerClient> listAllImages() {
-        return (dockerClient) -> {
+        return dockerClient -> {
             var containers = dockerClient.listContainersCmd()
                     .withShowSize(true)
                     .withShowAll(true)
                     .withStatusFilter(Collections.singleton("exited"))
                     .exec();
-
-            log.info(containers.get(0).getImage());
+            containers.forEach(container -> log.info(container.getImage()));
         };
     }
 
@@ -43,5 +44,38 @@ public class DockerCommands {
         };
     }
 
+    public static Consumer<DockerClient> removeContainerWithName(String containerName) {
+        return dockerClient -> {
+            try {
+                dockerClient.inspectContainerCmd(containerName).exec();
+                dockerClient.removeContainerCmd(containerName).exec();
+            } catch (NotFoundException e) {
+                log.info("Container doesn't exist: " + containerName);
+            }
+            log.info("Removed container: " + containerName);
+        };
+    }
+
+    public static Function<DockerClient,CreateContainerResponse> startAndStopMongoDbContainerFromImage(String containerName) {
+        return dockerClient -> {
+            log.info("Starting MongoDB container");
+
+            var container = ContainerCreator
+                    .createMongoDbContainer(containerName)
+                    .apply(dockerClient);
+
+            dockerClient.startContainerCmd(container.getId()).exec();
+
+            log.info("Done Starting MongoDB container");
+
+            log.info("Stopping MongoDB container");
+
+            dockerClient.stopContainerCmd(container.getId()).exec();
+
+            log.info("Done stopping MongoDB container");
+
+            return container;
+        };
+    }
 
 }
