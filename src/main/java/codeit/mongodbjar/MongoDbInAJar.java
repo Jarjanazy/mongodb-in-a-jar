@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class MongoDbInAJar {
     public static void main(String[] args) throws IOException {
-        DockerDaemonConnection.runAgainstDaemon(DockerCommands.listAllImages());
+        DockerDaemonConnection.runAgainstDaemon(DockerCommands.pullImage("mongo", "latest"));
     }
 
 }
