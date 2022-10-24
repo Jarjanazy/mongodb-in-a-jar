@@ -56,12 +56,14 @@ public class DockerCommands {
         };
     }
 
-    public static Function<DockerClient,CreateContainerResponse> startAndStopMongoDbContainerFromImage(String containerName) {
+    public static Function<DockerClient,CreateContainerResponse> startAndStopMongoDbContainerFromImage() {
         return dockerClient -> {
             log.info("Starting MongoDB container");
 
+            var configuration = new ContainerCreationConfiguration(9999, "mongodb-in-a-jar");
+
             var container = ContainerCreator
-                    .createMongoDbContainer(containerName)
+                    .createMongoDbContainer(configuration)
                     .apply(dockerClient);
 
             dockerClient.startContainerCmd(container.getId()).exec();

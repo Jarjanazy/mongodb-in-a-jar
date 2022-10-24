@@ -12,7 +12,7 @@ public class MongoDbInAJar {
 
         runAgainstDaemon(removeContainerWithName("mongodb-in-a-jar"));
 
-        var container = runAgainstDaemon(startAndStopMongoDbContainerFromImage("mongodb-in-a-jar"));
+        var container = runAgainstDaemon(startAndStopMongoDbContainerFromImage());
 
     }
 

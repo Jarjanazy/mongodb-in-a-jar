@@ -9,3 +9,10 @@ Instructions on how to connect to the MongoDB server will be shown to the user.
 
 The version of MongoDB will depend on the image version used in building the Jar. Users, however, can 
 rebuild the Jar using the Java source code with specifying the wanted MongoDB version. 
+
+## Opinionated Configurations
+
+### Durable data
+
+
+
