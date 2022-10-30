@@ -1,4 +1,4 @@
-package codeit.mongodbjar.docker;
+package codeit.mongodbjar.docker.configuration;
 
 import com.github.dockerjava.api.model.Volume;
 import lombok.Getter;
@@ -6,8 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class ContainerCreationConfiguration {
-    private final int HostPort;
-    private final String containerName;
+public class VolumeConfiguration {
     private final Volume volume;
+    private final String volumeName;
 }

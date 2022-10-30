@@ -1,15 +1,16 @@
 package codeit.mongodbjar.docker;
 
+import codeit.mongodbjar.docker.configuration.ContainerCreationConfiguration;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.api.model.Volume;
 import lombok.extern.slf4j.Slf4j;
 import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static codeit.mongodbjar.docker.VolumeCreator.createVolume;
 import static java.lang.String.format;
 
 @Slf4j
@@ -61,13 +62,9 @@ public class DockerCommands {
         return dockerClient -> {
             log.info("Starting MongoDB container");
 
-            // creates a volume under /var/lib/docker/volumes/mongodb-in-jar/_data
-            dockerClient.createVolumeCmd().withName("mongodb-in-jar").exec();
+            var volumeConfiguration = createVolume("mongodb-in-jar", dockerClient);
 
-            String pathWeWantToMountFromContainer = "/data/db";
-            Volume volumeInContainer = new Volume(pathWeWantToMountFromContainer);
-
-            var configuration = new ContainerCreationConfiguration(9999, "mongodb-in-a-jar", volumeInContainer);
+            var configuration = new ContainerCreationConfiguration(9999, "mongodb-in-a-jar", volumeConfiguration);
 
             var container = ContainerCreator
                     .createMongoDbContainer(configuration)
