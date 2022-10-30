@@ -14,12 +14,15 @@ public class ContainerCreator {
         Volume volume = configuration.getVolumeConfiguration().getVolume();
         String volumeName = configuration.getVolumeConfiguration().getVolumeName();
 
+        HostConfig hostConfig = HostConfig.newHostConfig()
+                .withBinds(new Bind(volumeName, volume))
+                .withPortBindings(PortBinding.parse(format("%s:27017", configuration.getHostPort())));
+
         return (dockerClient) -> dockerClient
                 .createContainerCmd("mongo")
                 .withName(configuration.getContainerName())
                 .withVolumes(singletonList(volume))
-                .withBinds(new Bind(volumeName, volume))
-                .withPortBindings(PortBinding.parse(format("%s:27017", configuration.getHostPort())))
+                .withHostConfig(hostConfig)
                 .exec();
     }
 }
