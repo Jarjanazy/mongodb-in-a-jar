@@ -20,6 +20,14 @@ public class DockerDaemonConnection {
         }
     }
 
+    public static void nonThrowingRunAgainstDaemon(Consumer<DockerClient> consumer) {
+        try (DockerClient dockerClient = DockerClientBuilder.getInstance().build()) {
+            consumer.accept(dockerClient);
+        } catch (IOException ioException) {
+            log.error("Unable to connect to DockerClient", ioException);
+        }
+    }
+
     public static <T> T runAgainstDaemon(Function<DockerClient,T> function) throws IOException {
         try (DockerClient dockerClient = DockerClientBuilder.getInstance().build()) {
             return function.apply(dockerClient);

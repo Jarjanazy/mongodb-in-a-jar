@@ -58,7 +58,7 @@ public class DockerCommands {
         };
     }
 
-    public static Function<DockerClient,CreateContainerResponse> startAndStopMongoDbContainerFromImage() {
+    public static Function<DockerClient,CreateContainerResponse> startMongoDbContainerFromImage() {
         return dockerClient -> {
             log.info("Starting MongoDB container");
 
@@ -74,14 +74,19 @@ public class DockerCommands {
 
             log.info("Done Starting MongoDB container");
 
+            return container;
+        };
+    }
+
+    public static Consumer<DockerClient> stopMongoDBContainer(CreateContainerResponse container) {
+        return dockerClient -> {
             log.info("Stopping MongoDB container");
 
             dockerClient.stopContainerCmd(container.getId()).exec();
 
             log.info("Done stopping MongoDB container");
-
-            return container;
         };
     }
+
 
 }
