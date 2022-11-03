@@ -21,6 +21,15 @@ public class MongoDbInAJar {
         Runtime
                 .getRuntime()
                 .addShutdownHook(new Thread(() -> nonThrowingRunAgainstDaemon(stopMongoDBContainer(container))));
+
+        keepThreadAlive();
+    }
+
+    private static void keepThreadAlive() {
+        Object forever = new Object();
+        synchronized (forever) {
+            try { forever.wait(); } catch (InterruptedException ignore) {}
+        }
     }
 
 }
