@@ -1,6 +1,7 @@
 package codeit.mongodbjar.docker;
 
 import codeit.mongodbjar.docker.configuration.ContainerCreationConfiguration;
+import codeit.mongodbjar.docker.creator.ContainerCreator;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.PullImageResultCallback;
@@ -10,7 +11,7 @@ import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static codeit.mongodbjar.docker.VolumeCreator.createVolume;
+import static codeit.mongodbjar.docker.creator.VolumeCreator.createVolume;
 import static java.lang.String.format;
 
 @Slf4j

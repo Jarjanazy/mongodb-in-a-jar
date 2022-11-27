@@ -1,4 +1,4 @@
-package codeit.mongodbjar.docker;
+package codeit.mongodbjar.docker.creator;
 
 import codeit.mongodbjar.docker.configuration.ContainerCreationConfiguration;
 import com.github.dockerjava.api.DockerClient;
