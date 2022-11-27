@@ -1,5 +1,6 @@
 package codeit.mongodbjar.docker;
 
+import codeit.mongodbjar.UserConfiguration;
 import codeit.mongodbjar.docker.configuration.ContainerCreationConfiguration;
 import codeit.mongodbjar.docker.creator.ContainerCreator;
 import com.github.dockerjava.api.DockerClient;
@@ -59,13 +60,13 @@ public class DockerCommands {
         };
     }
 
-    public static Function<DockerClient,CreateContainerResponse> startMongoDbContainerFromImage() {
+    public static Function<DockerClient,CreateContainerResponse> startMongoDbContainerFromImage(UserConfiguration userConfiguration) {
         return dockerClient -> {
             log.info("Starting MongoDB container");
 
             var volumeConfiguration = createVolume("mongodb-in-jar", dockerClient);
 
-            var configuration = new ContainerCreationConfiguration(9999, "mongodb-in-a-jar", volumeConfiguration);
+            var configuration = new ContainerCreationConfiguration(userConfiguration.getPort(), "mongodb-in-a-jar", volumeConfiguration);
 
             var container = ContainerCreator
                     .createMongoDbContainer(configuration)

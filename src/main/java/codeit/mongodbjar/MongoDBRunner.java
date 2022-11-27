@@ -10,12 +10,12 @@ import static codeit.mongodbjar.docker.DockerDaemonConnection.runAgainstDaemon;
 
 public class MongoDBRunner {
 
-    public void runMongoDB() throws IOException {
+    public void runMongoDB(UserConfiguration userConfiguration) throws IOException {
         runAgainstDaemon(DockerCommands.pullImage("mongo", "latest"));
 
         runAgainstDaemon(removeContainerWithName("mongodb-in-a-jar"));
 
-        var container = runAgainstDaemon(startMongoDbContainerFromImage());
+        var container = runAgainstDaemon(startMongoDbContainerFromImage(userConfiguration));
 
         Runtime
                 .getRuntime()
