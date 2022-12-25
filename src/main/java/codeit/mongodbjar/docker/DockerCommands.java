@@ -64,9 +64,7 @@ public class DockerCommands {
         return dockerClient -> {
             log.info("Starting MongoDB container");
 
-            var volumeConfiguration = createVolume("mongodb-in-jar", dockerClient);
-
-            var configuration = new ContainerCreationConfiguration(userConfiguration.getPort(), "mongodb-in-a-jar", volumeConfiguration);
+            var configuration = new ContainerCreationConfiguration(userConfiguration, "mongodb-in-a-jar", dockerClient);
 
             var container = ContainerCreator
                     .createMongoDbContainer(configuration)
